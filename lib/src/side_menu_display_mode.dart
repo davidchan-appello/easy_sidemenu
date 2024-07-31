@@ -15,5 +15,7 @@ enum SideMenuDisplayMode {
 
   /// The [Sidemenu] shows only icons until opened and is positioned to the left
   /// of the content.
-  compact
+  compact,
+
+  close
 }

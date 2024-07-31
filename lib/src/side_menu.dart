@@ -189,6 +189,8 @@ class _SideMenuState extends State<SideMenu> {
       width = _calculateOpenWidth();
     } else if (mode == SideMenuDisplayMode.compact) {
       width = _calculateCompactWidth();
+    } else if (mode == SideMenuDisplayMode.close) {
+      width = _calculateCloseWidth();
     }
 
     return width;
@@ -219,6 +221,13 @@ class _SideMenuState extends State<SideMenu> {
     _notifyParent();
     widget.global.showTrailing = false;
     return widget.global.style.compactSideMenuWidth ?? 50;
+  }
+
+  double _calculateCloseWidth() {
+    widget.global.displayModeState.change(SideMenuDisplayMode.close);
+    _notifyParent();
+    widget.global.showTrailing = false;
+    return 0;
   }
 
   Decoration _decoration(SideMenuStyle? menuStyle) {
@@ -266,10 +275,11 @@ class _SideMenuState extends State<SideMenu> {
     );
 
     // Return the side menu widget
-    return ((widget.global.style.showHamburger) &&
-            (_hamburgerMode == SideMenuHamburgerMode.close))
-        ? Align(alignment: Alignment.topLeft, child: hamburgerIcon)
-        : AnimatedContainer(
+    return ((widget.global.style.showHamburger) && (_hamburgerMode == SideMenuHamburgerMode.close)) ?
+            Align(alignment: Alignment.topLeft, child: hamburgerIcon) :
+            (widget.global.style.displayMode == SideMenuDisplayMode.close) ?
+            Align(alignment: Alignment.topLeft,) :
+            AnimatedContainer(
             duration: _toggleDuration(),
             width: _currentWidth,
             height: MediaQuery.sizeOf(context).height,
